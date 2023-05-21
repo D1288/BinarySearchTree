@@ -70,6 +70,21 @@ class Tree {
         }
     }
 
+    levelOrder() {
+        const queue = [];
+        queue.push(this.root)
+        while (queue.length) {
+            let current = queue.shift()
+            console.log(current.value)
+            if (current.left) {
+                queue.push(current.left)
+            }
+            if (current.right) {
+                queue.push(current.right)
+            }
+        }
+    }
+
     search(root, value) {
         if (!root) {
             return false
@@ -83,6 +98,24 @@ class Tree {
             }
         }
     }
+
+    min(root) {
+        if (!root.left) {
+            return root.value
+        } else {
+            return this.min(root.left)
+        }
+    }
+
+    max(root) {
+        if (!root.right) {
+            return root.value
+        } else {
+            return this.max(root.right)
+        }
+    }
+
+
 }
 
 
