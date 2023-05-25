@@ -54,6 +54,58 @@ class Tree {
         return root
     }
 
+    find(root, val){
+        if (!root) return "Not in tree"
+
+        if(root.data === val){
+            return root
+        } else if (val > root.data){
+            return this.find(root.right, val)
+        } else if (val < root.data){
+            return this.find(root.left, val)
+        }
+        return null
+    }
+
+    levelOrder(){
+
+        const queue = []
+        if (!this.root) return []
+        queue.push(this.root)
+        while(queue.length){
+            let curr = queue.shift()
+            console.log(curr)
+            if (curr.left) queue.push(curr.left)
+            if (curr.right) queue.push(curr.right)
+        }
+    }
+
+    inOrder(node = this.root, arr = []){
+        if (!node) return []
+        this.inOrder(node.left, arr)
+        arr.push(node.data)
+        this.inOrder(node.right, arr)
+        return arr
+    }
+
+    preOrder(node = this.root, arr = []){
+        if (!node) return []
+        arr.push(node.data)
+        this.preOrder(node.left, arr)
+        this.preOrder(node.right, arr)
+        return arr
+    }
+
+    postOrder(node = this.root, arr = []){
+        if (!node) return []
+        this.postOrder(node.left, arr)
+        this.postOrder(node.right, arr)
+        arr.push(node.data)
+        return arr
+    }
+
+
+
 }
 
 
@@ -63,6 +115,7 @@ class Tree {
 const data = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 const tree = new Tree(data);
 console.log(tree.root);
+console.log(tree.postOrder())
 
 
 
