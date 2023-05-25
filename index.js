@@ -23,7 +23,7 @@ class Tree {
     }
 
     //helper function to find minumum value
-    _min(root){
+    _min(root) {
         if (!root.left) return root.val
         else return this.min(root.left)
     }
@@ -54,33 +54,35 @@ class Tree {
         return root
     }
 
-    find(root, val){
+    find(root, val) {
         if (!root) return "Not in tree"
 
-        if(root.data === val){
+        if (root.data === val) {
             return root
-        } else if (val > root.data){
+        } else if (val > root.data) {
             return this.find(root.right, val)
-        } else if (val < root.data){
+        } else if (val < root.data) {
             return this.find(root.left, val)
         }
         return null
     }
 
-    levelOrder(){
+    levelOrder(arr = [], queue = [], node = this.root) {
+        if (!node) return
 
-        const queue = []
-        if (!this.root) return []
-        queue.push(this.root)
-        while(queue.length){
-            let curr = queue.shift()
-            console.log(curr)
-            if (curr.left) queue.push(curr.left)
-            if (curr.right) queue.push(curr.right)
+        arr.push(node.data)
+        queue.push(node.left)
+        queue.push(node.right)
+
+        while (queue.length){
+            const curr = queue[0]
+            queue.shift()
+            this.levelOrder(arr, queue, curr)
         }
+        return arr
     }
 
-    inOrder(node = this.root, arr = []){
+    inOrder(node = this.root, arr = []) {
         if (!node) return []
         this.inOrder(node.left, arr)
         arr.push(node.data)
@@ -88,7 +90,7 @@ class Tree {
         return arr
     }
 
-    preOrder(node = this.root, arr = []){
+    preOrder(node = this.root, arr = []) {
         if (!node) return []
         arr.push(node.data)
         this.preOrder(node.left, arr)
@@ -96,7 +98,7 @@ class Tree {
         return arr
     }
 
-    postOrder(node = this.root, arr = []){
+    postOrder(node = this.root, arr = []) {
         if (!node) return []
         this.postOrder(node.left, arr)
         this.postOrder(node.right, arr)
@@ -104,18 +106,35 @@ class Tree {
         return arr
     }
 
+    height(node) {
+        if (!node) return 0
+        const left = this.height(node.left) + 1
+        const right = this.height(node.right) + 1
+        if (left < right) return right
+        else return left
+    }
 
+    depth(node, root = this.root) {
+        if (node.data < root.data) return this.depth(node, root.left) + 1
+        if (node.data > root.data) return this.depth(node, root.right) + 1
+        return 0
+    }
 
+    isBalanced(node = this.root) {
+        if (!node) return true
+        if (Math.abs(this.height(node.left) - this.height(node.right)) > 1) return false
+        else return true
+    }
+
+    rebalance() {
+        let arr = this.inOrder()
+        this.root = buildTree(arr)
+    }
 }
 
 
 
 
-
-const data = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-const tree = new Tree(data);
-console.log(tree.root);
-console.log(tree.postOrder())
 
 
 
@@ -132,6 +151,16 @@ function buildTree(arr) {
     return root
 }
 
+// random array generator
+function randomArry() {
+    let arr = []
+    for (let i = 0; i < 10; i++) {
+        let num = Math.floor(Math.random() * 100)
+        arr.push(num)
+    }
+    return arr
+}
+
 
 
 //removes duplicate values and sorts the arry
@@ -139,4 +168,38 @@ function cleanAndSort(arr) {
     arr = [...new Set(arr)]
     return arr.sort((a, b) => a - b)
 }
+
+
+let data = randomArry()
+const tree = new Tree(data)
+console.log(tree.root)
+console.log(tree.isBalanced());
+
+console.log(tree.levelOrder());
+console.log(tree.inOrder());
+console.log(tree.preOrder());
+console.log(tree.postOrder());
+
+tree.insert(300);
+tree.insert(400);
+tree.insert(500);
+
+console.log(tree.isBalanced());
+tree.rebalance();
+console.log(tree.isBalanced());
+
+console.log(tree.levelOrder());
+console.log(tree.inOrder());
+console.log(tree.preOrder());
+console.log(tree.postOrder());
+
+
+
+
+
+
+
+
+
+
 
